@@ -20,7 +20,7 @@ model.add(Dense(5))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
-model.compile(loss = 'categorical_crossentropy' , optimizer = 'SGD')
+model.compile(loss = 'mse' , optimizer = 'adam')
 model.fit(x_train, y_train, epochs=1000, batch_size=5)
 
 #4. 평가, 예측
