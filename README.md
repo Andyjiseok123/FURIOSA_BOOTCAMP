@@ -8,3 +8,7 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 2일차 (2026.09.01)   
 &nbsp;&nbsp;&nbsp;&nbsp;-python을 이용한 matrix 기본 연산
 &nbsp;&nbsp;&nbsp;&nbsp;-Multi-layer percepticon 기본 구성
+
+3일차 (2026.09.02)   
+&nbsp;&nbsp;&nbsp;&nbsp;-sci-kit learn 라이브러리를 이용한 data set 분리(train/test set)
+&nbsp;&nbsp;&nbsp;&nbsp;-Multi-layer percepticon 기본 구성
