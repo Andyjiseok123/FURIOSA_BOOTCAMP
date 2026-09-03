@@ -44,3 +44,7 @@ def RMSE(y_test, y_predict):
 
 rmse = RMSE(y_test, y_predict)
 print("RMSE : ", rmse)
+
+# loss(mse) :  2981.767822265625
+# Accuracy(r2) :  0.4081496243731054
+# RMSE :  54.60556789589951
