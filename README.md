@@ -14,5 +14,6 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-sci-kit learn 라이브러리 내부의 훈련용 데이터를 활용한 학습
 
 4일차 (2026.09.03)   
-&nbsp;&nbsp;&nbsp;&nbsp;-MSE
+&nbsp;&nbsp;&nbsp;&nbsp;-MSE, R2, RMSE와 같은 정확도, loss 지표 확인
+&nbsp;&nbsp;&nbsp;&nbsp;-def()를 활용한 python user function 생성
 

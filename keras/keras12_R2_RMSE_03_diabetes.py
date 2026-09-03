@@ -11,20 +11,22 @@ from sklearn.model_selection import train_test_split
 datasets = load_diabetes()
 x = datasets.data
 y = datasets.target
+# print(datasets)
+# print(x.shape, y.shape) #(442,10) (442,)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=222)
 
 #2. 모델
 model = Sequential()
-model.add(Dense(24,input_dim = 8))
-model.add(Dense(12))
-model.add(Dense(6))
-model.add(Dense(3))
+model.add(Dense(30,input_dim = 10))
+model.add(Dense(15))
+model.add(Dense(5))
+model.add(Dense(2))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss = 'mse', optimizer = 'adam')
-model.fit(x_train, y_train, epochs = 1000, batch_size = 1000)
+model.fit(x_train, y_train, epochs = 3000, batch_size = 30)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
