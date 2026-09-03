@@ -11,4 +11,8 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 
 3일차 (2026.09.02)   
 &nbsp;&nbsp;&nbsp;&nbsp;-sci-kit learn 라이브러리를 이용한 data set 분리(train/test set)
-&nbsp;&nbsp;&nbsp;&nbsp;-Multi-layer percepticon 기본 구성
+&nbsp;&nbsp;&nbsp;&nbsp;-sci-kit learn 라이브러리 내부의 훈련용 데이터를 활용한 학습
+
+4일차 (2026.09.03)   
+&nbsp;&nbsp;&nbsp;&nbsp;-MSE
+
