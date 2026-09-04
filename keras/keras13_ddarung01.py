@@ -12,7 +12,8 @@ def RMSE(y_test, y_predict):
 
 
 #1. 데이터
-path = "./_data/ddarung/"
+path = "./_data/ddarung/"                                       #상대경로
+#path = "C:/Users/Admin/Desktop/jiseokLee/Project/ddarung"      #절대경로 ,  '/' '\' 둘다 상관 없음
 
 train_csv = pd.read_csv(path + "train.csv", index_col=0)  #index_col = 0 : 첫번째 coloumn을 index 처리하여 data로 취급하지 않음
 print(train_csv)            #[1459 rows x 10 columns]
@@ -57,3 +58,14 @@ y_predict = model.predict(x_test)
 rmse = RMSE(y_test, y_predict)
 print("RMSE value : ", rmse)
 
+
+# 블럭 주석
+"""
+Hyperparameter tuning
+random_state
+train_size
+레이어 깊이
+노드의 개수
+epochs
+batch_size
+"""
