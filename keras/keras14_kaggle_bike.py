@@ -48,10 +48,12 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random
 
 #2. 모델 구성
 model = Sequential()
-model.add(Dense(32,activation='relu', input_dim=8))
+model.add(Dense(50,activation='relu', input_dim=8))
+model.add(Dense(32,activation='relu'))
+model.add(Dense(7,activation='relu'))
 model.add(Dense(16,activation='relu'))
 model.add(Dense(8,activation='relu'))
-model.add(Dense(1,activation='sigmoid'))
+model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
@@ -71,7 +73,7 @@ submission['count'] = y_submit
 # print(submission)
 # print(submission.shape)
 
-submission.to_csv(path + "submit/" + "submit_0904_1639_AF.csv")
+submission.to_csv(path + "submit/" + "submit_0904_1700_AF.csv")
 
 """
 Hyperparameter tuning
@@ -99,15 +101,27 @@ train_size          :   0.7
 list_percepticon    :   [32,16,8,1]
 epochs              :   500
 batch_size          :   50
-RMSE value          :   260.44
+RMSE value          :   260.443
 """
 """
 Hyperparameter tuning
+file                :   submit_0904_1639_AF
 remarks             :   Add activation function(Relu) at hidden layer & sigmoid at last layer
 random_state        :   3124
 train_size          :   0.7
 list_percepticon    :   [32,16,8,1]
 epochs              :   500
 batch_size          :   50
-RMSE value          :   260.44
+RMSE value          :   259.712
+"""
+"""
+Hyperparameter tuning
+file                :   submit_0904_1700_AF
+remarks             :   Add activation function(Relu) at hidden layer
+random_state        :   3124
+train_size          :   0.7
+list_percepticon    :   [50,32,7,16,8,1]
+epochs              :   500
+batch_size          :   50
+RMSE value          :   
 """
