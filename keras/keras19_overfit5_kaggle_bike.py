@@ -6,6 +6,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_squared_log_error
+import time
 
 #0. 평가 지표(RMSLE) 계산 함수 작성
 def RMSE(y_test, y_predict):
@@ -44,7 +45,8 @@ print(test_csv.info())  #(715,9)
 # train_csv를 x와 y로 분리
 x = train_csv.drop(['casual','registered', 'count'], axis=1) #열 삭제)
 y = train_csv['count']
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random_state=3124)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, random_state=3124)
+x_train,x_val,y_train,y_val = train_test_split(x_train,y_train,train_size=0.33, random_state=1231)
 
 #2. 모델 구성
 model = Sequential()
@@ -57,7 +59,10 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=500, batch_size=8 )
+start_time = time.time()
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=8,
+          verbose = 1, validation_data = (x_val,y_val))
+end_time = time.time()
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -73,58 +78,8 @@ submission['count'] = y_submit
 # print(submission)
 # print(submission.shape)
 
-submission.to_csv(path + "submit/" + "submit_0907_1012_AF.csv")
+# submission.to_csv(path + "submit/" + "submit_0907_1012_AF.csv")
 
-"""
-Hyperparameter tuning
-random_state        :   915124
-train_size          :   0.85
-list_percepticon    :   [100,100,32,17,9,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   155.349
-"""
-"""
-Hyperparameter tuning
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [32,16,8,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   153.334
-"""
-"""
-Hyperparameter tuning
-remarks             :   Add activation function(Relu) at last dense layer
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [32,16,8,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   260.443
-"""
-"""
-Hyperparameter tuning
-file                :   submit_0904_1639_AF
-remarks             :   Add activation function(Relu) at hidden layer & sigmoid at last layer
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [32,16,8,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   259.712
-"""
-"""
-Hyperparameter tuning
-file                :   submit_0904_1700_AF
-remarks             :   Add activation function(Relu) at hidden layer
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [50,32,7,16,8,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   147.9581
-"""
 """
 Hyperparameter tuning
 file                :   submit_0907_1012_AF
@@ -136,3 +91,15 @@ epochs              :   500
 batch_size          :   8
 RMSE value          :   147.9581
 """
+import matplotlib.pyplot as plt
+plt.rcParams['font.family'] = 'Malgun Gothic'
+plt.rcParams['axes.unicode_minus'] = False
+plt.figure(figsize=(9,6))
+plt.plot(np.log(hist.history['loss'][10:]), c='red', label='loss')
+plt.plot(np.log(hist.history['val_loss'][10:]), c='blue', label='val_loss')
+plt.legend(loc='upper right')
+plt.title('kaggle Loss')
+plt.xlabel('epoch')
+plt.ylabel('los')
+plt.grid()
+plt.show()

@@ -1,4 +1,5 @@
 # https://www.kaggle.com/competitions/bike-sharing-demand/data
+# keras 14 copy
 
 import numpy as np
 import pandas as pd
@@ -6,6 +7,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_squared_log_error
+import time
 
 #0. 평가 지표(RMSLE) 계산 함수 작성
 def RMSE(y_test, y_predict):
@@ -57,7 +59,9 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=500, batch_size=8 )
+start_time = time.time()            #현재시간을 반환 = 훈련 시작 시간
+model.fit(x_train, y_train, epochs=100, batch_size=32 )
+end_time = time.time()              #현재시간을 반환 = 훈련 종효 시간
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -65,74 +69,13 @@ y_predict = model.predict(x_test)
 rmse = RMSE(y_test, y_predict)
 print("RMSE value : ", rmse)
 
+print("걸린 시간 : ", round(end_time-start_time,2), "초")
 
-############### submission.csv 만들기 // 결과값을 count cloumn에 넣어준다 ##################
-y_submit = model.predict(test_csv)
+# ############### submission.csv 만들기 // 결과값을 count cloumn에 넣어준다 ##################
+# y_submit = model.predict(test_csv)
 
-submission['count'] = y_submit
-# print(submission)
-# print(submission.shape)
+# submission['count'] = y_submit
+# # print(submission)
+# # print(submission.shape)
 
-submission.to_csv(path + "submit/" + "submit_0907_1012_AF.csv")
-
-"""
-Hyperparameter tuning
-random_state        :   915124
-train_size          :   0.85
-list_percepticon    :   [100,100,32,17,9,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   155.349
-"""
-"""
-Hyperparameter tuning
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [32,16,8,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   153.334
-"""
-"""
-Hyperparameter tuning
-remarks             :   Add activation function(Relu) at last dense layer
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [32,16,8,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   260.443
-"""
-"""
-Hyperparameter tuning
-file                :   submit_0904_1639_AF
-remarks             :   Add activation function(Relu) at hidden layer & sigmoid at last layer
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [32,16,8,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   259.712
-"""
-"""
-Hyperparameter tuning
-file                :   submit_0904_1700_AF
-remarks             :   Add activation function(Relu) at hidden layer
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [50,32,7,16,8,1]
-epochs              :   500
-batch_size          :   50
-RMSE value          :   147.9581
-"""
-"""
-Hyperparameter tuning
-file                :   submit_0907_1012_AF
-remarks             :   Add activation function(Relu) at hidden layer
-random_state        :   3124
-train_size          :   0.7
-list_percepticon    :   [10,10,10,10,10,1]
-epochs              :   500
-batch_size          :   8
-RMSE value          :   147.9581
-"""
+# submission.to_csv(path + "submit/" + "submit_0907_1412_AF.csv")

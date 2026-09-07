@@ -17,6 +17,15 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-MSE, R2, RMSE와 같은 정확도, loss 지표 확인
 &nbsp;&nbsp;&nbsp;&nbsp;-def()를 활용한 python user function 생성
 &nbsp;&nbsp;&nbsp;&nbsp;-DAKON 데이터 활용 실습(따릉이 대여량 예측)
+&nbsp;&nbsp;&nbsp;&nbsp;-Pandas 모듈을 활용해 데이터 전처리
 
 5일차 (2026.09.04)
 &nbsp;&nbsp;&nbsp;&nbsp;-DAKON 데이터 활용 실습(따릉이 대여량 예측)
+&nbsp;&nbsp;&nbsp;&nbsp;-Kaggle 데이터 활용 실습(자전거 대여량 예측)
+&nbsp;&nbsp;&nbsp;&nbsp;-활성화 함수(Relu) 활용
+
+6일차 (2026.09.07)
+&nbsp;&nbsp;&nbsp;&nbsp;-verbose 옵션 활용
+&nbsp;&nbsp;&nbsp;&nbsp;-validation set 분리 - validation loss 도출 및 시각화
+&nbsp;&nbsp;&nbsp;&nbsp;-time 모듈을 활용한 학습 소요시간 계산
+&nbsp;&nbsp;&nbsp;&nbsp;-early stopping option을 통한 학습 최적화
