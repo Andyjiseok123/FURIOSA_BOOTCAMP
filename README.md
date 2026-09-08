@@ -29,3 +29,7 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-validation set 분리 - validation loss 도출 및 시각화
 &nbsp;&nbsp;&nbsp;&nbsp;-time 모듈을 활용한 학습 소요시간 계산
 &nbsp;&nbsp;&nbsp;&nbsp;-early stopping option을 통한 학습 최적화
+
+7일차 (2026.09.08)
+&nbsp;&nbsp;&nbsp;&nbsp;-이진 분류 (sigmoid, binary crossentropy)
+&nbsp;&nbsp;&nbsp;&nbsp;-
