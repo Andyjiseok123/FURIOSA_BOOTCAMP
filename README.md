@@ -37,7 +37,7 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-다중 분류 (softmax, categorical crossentropy)
 
 |                                 | 회귀             | 이진 분류                | 다중 분류                     |
-|: ---------------------------:|:--------------:|:--------------------:|:-------------------------:|
+|:---:|:---:|:---:|:---:|
 | One Hot Encoding               | X              | X                    | O                         |
 | last layer Activation function | linear         | sigmoid              | softmax                   |
 | last layer number of node      | N              | 1                    | number of class
