@@ -45,9 +45,11 @@ One Hot Encoding : 수치화된 값을 벡터화 하여 동일한 value를 지�
 ####################### 원핫 3. sklearn.processing ######################
 #######################    from sci-kit learn   #########################
 from sklearn.preprocessing import OneHotEncoder
-category = y.reshape(-1,1)
-encoder = OneHotEncoder().fit_transform(category)
-y = encoder.toarray()
+y_rs = y.reshape(-1,1)
+y = OneHotEncoder(sparse_output=False).fit_transform(y_rs)
+# y = encoder.toarray()
+print(y)
+exit()
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.85,
