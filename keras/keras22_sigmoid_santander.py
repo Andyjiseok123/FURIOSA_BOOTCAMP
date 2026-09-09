@@ -49,9 +49,9 @@ model.add(Dense(200, activation='relu'))
 model.add(Dense(1,activation='sigmoid'))
 
 #3. 컴파일, 훈련
-model.compile(loss='binary_crossentropy', optimizer='adam',
-            #   metrics = ['accuracy']
-            metrics=['acc']
+model.compile(loss='binary_crossentropy', 
+              optimizer='adam',
+              metrics=['acc']
               )                                           # metrics : 주요 보조지표
 
 es = EarlyStopping(
