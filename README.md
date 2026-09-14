@@ -43,3 +43,22 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 | last layer number of node      | N              | 1                    | number of class
 | loss                           | MSE, MAE, .... | binary crossentropy | categorical crossentropy |
 | predict                        | None           | np.round()           | np.argmax(,axis=)         |
+
+9일차 (2026.09.10)  
+&nbsp;&nbsp;&nbsp;&nbsp;-(결석) data scaling  
+
+10일차 (2026.09.11)  
+&nbsp;&nbsp;&nbsp;&nbsp;-(결석) save, load model/weights
+
+11일차 (2026.09.14)  
+&nbsp;&nbsp;&nbsp;&nbsp;-Model check point를 활용한 train 이력 저장  
+&nbsp;&nbsp;&nbsp;&nbsp;-지금까지 사용한 dataset을 활용한 실습  
+&nbsp;&nbsp;&nbsp;&nbsp;-dropout을 활용한 모델 성능 향상
+
+12일차 
+
+
+
+
+
+
