@@ -2,9 +2,9 @@ from sklearn.datasets import fetch_covtype
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.models import Sequential, load_model, Model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.layers import Dense, Dropout, Input
 import time
 from sklearn.metrics import accuracy_score
 import os
@@ -73,17 +73,31 @@ x_test = scaler.transform(x_test)
 
 
 #2.모델구성
-model = Sequential()
-model.add(Dense(200, input_dim=54, activation= 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(300, activation= 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(300, activation= 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(200, activation= 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(100, activation= 'relu'))
-model.add(Dense(7,activation='softmax'))
+# model = Sequential()
+# model.add(Dense(200, input_dim=54, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(300, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(300, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(200, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(100, activation= 'relu'))
+# model.add(Dense(7,activation='softmax'))
+
+input1 = Input(shape=(54,))
+dense1 = Dense(200,activation = 'relu',name='ys1')(input1)
+drop1 = Dropout(0.2)(dense1)
+dense2 = Dense(300,activation = 'relu', name= 'ys2')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(300,activation = 'relu', name= 'ys3')(drop2)
+drop3 = Dropout(0.4)(dense3)
+dense4 = Dense(200,activation = 'relu', name= 'ys4')(drop3)
+drop4 = Dropout(0.2)(dense4)
+dense5 = Dense(100,activation = 'relu', name= 'ys5')(drop4)
+output1 = Dense(7,activation='softmax')(dense5)
+
+model = Model(inputs=input1, outputs=output1)
 
 #3.컴파일,훈련
 model.compile(loss = 'categorical_crossentropy',

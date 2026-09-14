@@ -3,8 +3,8 @@
 # import ssl
 # ssl._create_default_https_context = ssl.create_default_context 다운로드 안될떄 사용할것
 from sklearn.datasets import fetch_california_housing
-from tensorflow.keras.models import Sequential,load_model
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.models import Sequential,load_model, Model
+from tensorflow.keras.layers import Dense, Dropout, Input
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score,mean_squared_error
 import numpy as np
@@ -48,16 +48,29 @@ x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test) 
 
 #2.모델구성
-model = Sequential()
-model.add(Dense(9, input_dim=8,activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(9,activation='relu'))
-model.add(Dropout(0.3))
-model.add(Dense(12,activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(9,activation='relu'))
-model.add(Dense(5,activation='relu'))
-model.add(Dense(1))
+# model = Sequential()
+# model.add(Dense(9, input_dim=8,activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(9,activation='relu'))
+# model.add(Dropout(0.3))
+# model.add(Dense(12,activation='relu'))
+# model.add(Dropout(0.5))
+# model.add(Dense(9,activation='relu'))
+# model.add(Dense(5,activation='relu'))
+# model.add(Dense(1))
+
+input1 = Input(shape=(8,))
+dense1 = Dense(9,activation = 'relu',name='ys1')(input1)
+drop1 = Dropout(0.2)(dense1)
+dense2 = Dense(9,activation = 'relu', name= 'ys2')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(12,activation = 'relu', name= 'ys3')(drop2)
+drop3 = Dropout(0.2)(dense3)
+dense4 = Dense(9,activation = 'relu', name= 'ys4')(drop3)
+dense5 = Dense(5,activation = 'relu', name= 'ys5')(dense4)
+output1 = Dense(1)(dense5)
+
+model = Model(inputs=input1, outputs=output1)
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 #3.컴파일,훈련

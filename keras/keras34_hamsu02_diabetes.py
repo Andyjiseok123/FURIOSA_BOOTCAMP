@@ -1,6 +1,6 @@
 from sklearn.datasets import fetch_california_housing, load_diabetes #캘리포니아 집값 데이터셋,로드 디아벳
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Dropout, Input
 from sklearn.model_selection import train_test_split 
 from sklearn.metrics import r2_score,mean_squared_error
 import numpy as np
@@ -55,16 +55,29 @@ x_train = scaler.fit_transform(x_train) # 0~1 값 변환 사이로변환
 x_test = scaler.transform(x_test) 
 
 #2.모델구성
-model = Sequential()
-model.add(Dense(3, input_dim=10,activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(10,activation='relu'))
-model.add(Dropout(0.3))
-model.add(Dense(15,activation='relu'))
-model.add(Dropout(0.3))
-model.add(Dense(20,activation='relu'))
-model.add(Dense(10,activation='relu'))
-model.add(Dense(1,))
+# model = Sequential()
+# model.add(Dense(3, input_dim=10,activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(10,activation='relu'))
+# model.add(Dropout(0.3))
+# model.add(Dense(15,activation='relu'))
+# model.add(Dropout(0.3))
+# model.add(Dense(20,activation='relu'))
+# model.add(Dense(10,activation='relu'))
+# model.add(Dense(1,))
+
+input1 = Input(shape=(10,))
+dense1 = Dense(3,activation = 'relu',name='ys1')(input1)
+drop1 = Dropout(0.2)(dense1)
+dense2 = Dense(10,activation = 'relu', name= 'ys2')(drop1)
+drop2 = Dropout(0.3)(dense2)
+dense3 = Dense(15,activation = 'relu', name= 'ys3')(drop2)
+drop3 = Dropout(0.3)(dense3)
+dense4 = Dense(20,activation = 'relu', name= 'ys4')(drop3)
+dense5 = Dense(10,activation = 'relu', name= 'ys5')(dense4)
+output1 = Dense(1)(dense5)
+
+model = Model(inputs=input1, outputs=output1)
 
 #3.컴파일,훈련
 model.compile(loss='mse', optimizer= 'adam')

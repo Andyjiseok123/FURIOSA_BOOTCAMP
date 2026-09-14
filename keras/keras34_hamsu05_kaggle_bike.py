@@ -1,8 +1,8 @@
 # https://www.kaggle.com/competitions/bike-sharing-demand/data
 import numpy as np
 import pandas as pd
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Dropout, Input
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score,mean_squared_error
 
@@ -64,19 +64,33 @@ x_test = scaler.transform(x_test)
 
 #2.모델구성
 
-model = Sequential()
-model.add(Dense(10, activation='relu', input_dim=8))
-model.add(Dropout(0.2))
-model.add(Dense(20,activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(30,activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(20,activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(10,activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(1,activation='relu'))
+# model = Sequential()
+# model.add(Dense(10, activation='relu', input_dim=8))
+# model.add(Dropout(0.2))
+# model.add(Dense(20,activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(30,activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(20,activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(10,activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(1,activation='relu'))
 
+input1 = Input(shape=(8,))
+dense1 = Dense(10,activation = 'relu',name='ys1')(input1)
+drop1 = Dropout(0.2)(dense1)
+dense2 = Dense(20,activation = 'relu', name= 'ys2')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(30,activation = 'relu', name= 'ys3')(drop2)
+drop3 = Dropout(0.2)(dense3)
+dense4 = Dense(20,activation = 'relu', name= 'ys4')(drop3)
+drop4 = Dropout(0.2)(dense4)
+dense5 = Dense(10,activation = 'relu', name= 'ys5')(drop4)
+drop5 = Dropout(0.2)(dense5)
+output1 = Dense(1)(drop5)
+
+model = Model(inputs=input1, outputs=output1)
 
 #3.컴파일 훈련
 model.compile(loss = 'mse', optimizer= 'adam' )

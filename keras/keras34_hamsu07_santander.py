@@ -1,8 +1,8 @@
 ###이진 븐류를 다중분류로 변형해서 테스트해보기###
 import numpy as np
 import pandas as pd
-from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import Dense,Dropout
+from tensorflow.keras.models import Sequential, load_model, Model
+from tensorflow.keras.layers import Dense,Dropout, Input
 from sklearn.model_selection import train_test_split
 import time
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -77,18 +77,33 @@ x_test = scaler.transform(x_test)
 
 
 # #2.모델구성
-model = Sequential()
-model.add(Dense(100, input_dim=200, activation= 'relu'))
-model.add(Dropout(0.3))
-model.add(Dense(200, activation= 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(300,activation= 'relu'))
-model.add(Dropout(0.4))
-model.add(Dense(400, activation= 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(200, activation= 'relu'))
-model.add(Dropout(0.5))
-model.add(Dense(2,activation= 'softmax'))
+# model = Sequential()
+# model.add(Dense(100, input_dim=200, activation= 'relu'))
+# model.add(Dropout(0.3))
+# model.add(Dense(200, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(300,activation= 'relu'))
+# model.add(Dropout(0.4))
+# model.add(Dense(400, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(200, activation= 'relu'))
+# model.add(Dropout(0.5))
+# model.add(Dense(2,activation= 'softmax'))
+
+input1 = Input(shape=(200,))
+dense1 = Dense(100,activation = 'relu',name='ys1')(input1)
+drop1 = Dropout(0.3)(dense1)
+dense2 = Dense(200,activation = 'relu', name= 'ys2')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(300,activation = 'relu', name= 'ys3')(drop2)
+drop3 = Dropout(0.4)(dense3)
+dense4 = Dense(400,activation = 'relu', name= 'ys4')(drop3)
+drop4 = Dropout(0.2)(dense4)
+dense5 = Dense(200,activation = 'relu', name= 'ys5')(drop4)
+drop5 = Dropout(0.5)(dense5)
+output1 = Dense(2,activation='softmax')(drop5)
+
+model = Model(inputs=input1, outputs=output1)
 
 #3.컴파일,훈련
 model.compile(loss ='categorical_crossentropy',

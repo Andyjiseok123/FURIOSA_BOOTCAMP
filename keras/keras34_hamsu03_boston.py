@@ -1,6 +1,6 @@
 #11_3 COPY
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Dropout, Input
 from tensorflow.keras.datasets import boston_housing
 import numpy as np
 from sklearn.metrics import r2_score,mean_squared_error
@@ -46,17 +46,27 @@ x_train = scaler.fit_transform(x_train) # 0~1 값 변환 사이로변환
 x_test = scaler.transform(x_test) 
 
 #2.모델구성
-model = Sequential()
-model.add(Dense(3, input_dim=13))
-model.add(Dropout(0.2))
-model.add(Dense(5))
-model.add(Dropout(0.2))
-model.add(Dense(5))
-model.add(Dropout(0.2))
-model.add(Dense(4))
-model.add(Dense(1))
+# model = Sequential()
+# model.add(Dense(3, input_dim=13))
+# model.add(Dropout(0.2))
+# model.add(Dense(5))
+# model.add(Dropout(0.2))
+# model.add(Dense(5))
+# model.add(Dropout(0.2))
+# model.add(Dense(4))
+# model.add(Dense(1))
 
+input1 = Input(shape=(13,))
+dense1 = Dense(3,name='ys1')(input1)
+drop1 = Dropout(0.2)(dense1)
+dense2 = Dense(5, name= 'ys2')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(5, name= 'ys3')(drop2)
+drop3 = Dropout(0.2)(dense3)
+dense4 = Dense(4, name= 'ys4')(drop3)
+output1 = Dense(1)(dense4)
 
+model = Model(inputs=input1, outputs=output1)
 
 #3.컴파일,훈련
 model.compile(loss='mse', optimizer= 'adam') #mse= 원값에서 예측값 뺴고 나온값을 제곱 > 다 더해서 갯수만큼 엔빵

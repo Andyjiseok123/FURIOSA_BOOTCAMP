@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.models import Sequential, load_model, Model
+from tensorflow.keras.layers import Dense, Dropout, Input
 from sklearn.model_selection import train_test_split
 import time
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -68,19 +68,35 @@ x_test = scaler.transform(x_test)
 
 
 #2모델구성
-model = Sequential()
-model.add(Dense(30, input_dim=30, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(60, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(70, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(80, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(60, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(32, activation='relu'))  #기본 디폴트값은 리니어 
-model.add(Dense(1, activation='sigmoid'))  #마지막은 무조건 시그모이드 고정  
+# model = Sequential()
+# model.add(Dense(30, input_dim=30, activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(60, activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(70, activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(80, activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(60, activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(32, activation='relu'))  #기본 디폴트값은 리니어 
+# model.add(Dense(1, activation='sigmoid'))  #마지막은 무조건 시그모이드 고정  
+
+input1 = Input(shape=(30,))
+dense1 = Dense(30,activation = 'relu',name='ys1')(input1)
+drop1 = Dropout(0.2)(dense1)
+dense2 = Dense(60,activation = 'relu', name= 'ys2')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(70,activation = 'relu', name= 'ys3')(drop2)
+drop3 = Dropout(0.2)(dense3)
+dense4 = Dense(80,activation = 'relu', name= 'ys4')(drop3)
+drop4 = Dropout(0.2)(dense4)
+dense5 = Dense(60,activation = 'relu', name= 'ys5')(drop4)
+drop5 = Dropout(0.2)(dense5)
+dense6 = Dense(60,activation = 'relu', name= 'ys6')(drop5)
+output1 = Dense(1,activation='sigmoid')(dense6)
+
+model = Model(inputs=input1, outputs=output1)
 
 
 #3.컴파일 ,훈련
