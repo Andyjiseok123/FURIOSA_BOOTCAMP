@@ -1,0 +1,157 @@
+#https://dacon.io/competitions/open/235576/codeshare 대회 주소
+import numpy as np
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Dropout, Input
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+import pandas as pd
+
+import datetime
+path = './_save/keras31/ddarung/'
+date = datetime.datetime.now()
+date = date.strftime("%m%d_%H%M")
+filename = '{epoch:04d}-{val_loss:4f}.keras'
+filepath = "".join([path,"k31_",date,filename])
+
+#1. 데이터
+
+path = '.\\_data\\ddarung\\'   #<<< \\두개써도 가능
+train_csv = pd.read_csv(path + "train.csv",index_col=0 )#index_col 데이터 첫번째 ID는 Y값 추청에 전혀 영향이 없으니 데이터로 사용하지않게함
+test_csv = pd.read_csv(path + "test.csv", index_col=0)
+submission = pd.read_csv(path + "submission.csv", index_col=0)
+train_csv = train_csv.dropna() # 결측치(NaN) 있는 ROW 행 삭제후 다시 train.csv에 넣어줌 
+x = train_csv.drop(['count'], axis=1)  #열(컬럼) 삭제  drop(['컬럼명 넣으면됨'])
+y = train_csv['count']
+x_train,x_test,y_train,y_test = train_test_split(
+    x,y,
+    train_size=0.8,
+    random_state=666,
+)
+from sklearn.preprocessing import MinMaxScaler,StandardScaler,MaxAbsScaler
+from sklearn.preprocessing import RobustScaler
+##############################################################################
+# scaler = MinMaxScaler()
+##############################################################################
+
+
+
+##############################################################################
+# scaler = StandardScaler()
+##############################################################################
+
+
+
+##############################################################################
+# scaler = MaxAbsScaler()
+##############################################################################
+
+
+##############################################################################
+scaler = RobustScaler()
+##############################################################################
+scaler.fit(x_train) # x 값을  MinMaxScaler으로 실행시킬 준비
+x_train = scaler.fit_transform(x_train) # 0~1 값 변환 사이로변환
+x_test = scaler.transform(x_test) 
+
+
+#####################submit 작업 ################################
+# print(test_csv.info())
+# print(test_csv.shape) 
+
+#  #   Column                  Non-Null Count  Dtype  
+# ---  ------                  --------------  -----  
+#  0   hour                    715 non-null    int64  
+#  1   hour_bef_temperature    714 non-null    float64
+
+
+######################결측치 처리 2.평균값 넣기 ####################
+# test_csv = test_csv.fillna(test_csv.mean())   ##
+# print(test_csv.info()) #(715, 9)
+# print(test_csv.shape) #(715, 9)
+
+#  #   Column                  Non-Null Count  Dtype  
+# ---  ------                  --------------  -----  
+#  0   hour                    715 non-null    int64  
+#  1   hour_bef_temperature    715 non-null    float64
+#  2   hour_bef_precipitation  715 non-null    float64
+#  3   hour_bef_windspeed      715 non-null    float64
+# exit()
+
+#2.모델구성
+# model = Sequential()
+# model.add(Dense(64, input_dim=9))
+# model.add(Dropout(0.2))
+# model.add(Dense(32))
+# model.add(Dropout(0.2))
+# model.add(Dense(16))
+# model.add(Dropout(0.2))
+# model.add(Dense(8))
+# model.add(Dropout(0.2))
+# model.add(Dense(4))
+# model.add(Dropout(0.2))
+# model.add(Dense(1))
+
+input1 = Input(shape=(9,))
+dense1 = Dense(64,name='ys1')(input1)
+drop1 = Dropout(0.2)(dense1)
+dense2 = Dense(32, name= 'ys2')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(16, name= 'ys3')(drop2)
+drop3 = Dropout(0.2)(dense3)
+dense4 = Dense(8, name= 'ys4')(drop3)
+drop4 = Dropout(0.2)(dense4)
+dense5 = Dense(4, name= 'ys5')(dense4)
+drop5 = Dropout(0.2)(dense5)
+output1 = Dense(1)(drop5)
+
+model = Model(inputs=input1, outputs=output1)
+
+#3.컴파일 ,훈련
+
+model.compile(loss = 'mse', optimizer = 'adam')
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+es = EarlyStopping(
+    monitor= 'val_loss',
+    mode='auto',
+    patience=15,
+    restore_best_weights=True
+)
+
+mcp = ModelCheckpoint(monitor='val_loss',
+                      mode='auto',
+                      save_best_only=True,
+                      filepath = filepath,
+                      verbose=1
+                      )
+
+hist = model.fit(x_train,y_train , 
+                 epochs= 500 , batch_size=32,
+                 validation_split=0.2,
+                 callbacks = [es]
+                 )
+
+#4.평가 예측
+loss = model.evaluate(x_test,y_test)
+print("loss:", loss)
+
+y_predict = model.predict(x_test)
+r2 = r2_score(y_test, y_predict)
+print('r2결과값: ' ,r2)
+
+y2_pred = model.predict(test_csv)
+
+mse = mean_squared_error(y_test,y_predict)
+print('mse : ', mse)
+
+def RMSE(y_test, y_predict):  #RMSE 함수정의
+    return np.sqrt(mean_squared_error(y_test,y_predict))  #np.sqrt하면 mse에 루트가 씌워짐
+
+rmse = RMSE(y_test, y_predict)
+
+print('RMSE : ', rmse) 
+
+
+# r2결과값:  0.5912752209324412
+# 23/23 ━━━━━━━━━━━━━━━━━━━━ 0s 1ms/step
+# mse :  2469.627688314252
+# RMSE :  49.695348759358275

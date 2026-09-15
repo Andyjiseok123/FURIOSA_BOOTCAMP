@@ -67,7 +67,7 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 | 가상환경 | conda create -n tf29x-gpu python=3.10 |
 | python | 3.10 |
 | tensorflow | tensorflow-gpu==2.9.3 |
-
+| numpy | uninstall and install 1.26.4 version |
 
 
 

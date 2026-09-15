@@ -1,0 +1,149 @@
+from sklearn.datasets import fetch_covtype
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential, load_model, Model
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.layers import Dense, Dropout, Input
+import time
+from sklearn.metrics import accuracy_score
+import os
+
+import datetime
+path = './_save/keras31/fetch_covtype/'
+date = datetime.datetime.now()
+date = date.strftime("%m%d_%H%M")
+filename = '{epoch:04d}-{val_loss:4f}.keras'
+filepath = "".join([path,"k31_",date,filename])
+
+
+#1.데이터
+datasets = fetch_covtype()
+# print(datasets)
+# shape=(581012, 54))  ,shape=(581012,)
+
+x = datasets.data
+y = datasets.target
+
+# print(x.shape,y.shape)  #(581012, 54) (581012,)
+print(np.unique(y,return_counts=True)) 
+
+# from tensorflow.keras.utils import to_categorical 
+# y = to_categorical(y)
+# print(y)
+# print(y.shape) #(581012, 8)
+'''
+#(array([1, 2, 3, 4, 5, 6, 7], dtype=int32),
+#array([211840, 283301,  35754,   2747,   9493,  17367,  20510]))
+>>>>.
+to_categorical  쓰면 0~부터 컬럼을 만들어서 만약 1,2,3,4,5,6,7의 컬럼이 형성되어있으면 
+0,1,2,3,4,5,6,7,8로 늘어남 
+'''
+y = pd.get_dummies(y,dtype=int)
+# print(y.shape) #(581012, 7)
+
+
+x_train,x_test,y_train,y_test = train_test_split(
+    x,y,
+    train_size=0.7,
+    random_state=333,
+    shuffle=True,
+    stratify=y,
+    )
+from sklearn.preprocessing import MinMaxScaler,StandardScaler,MaxAbsScaler
+from sklearn.preprocessing import RobustScaler
+##############################################################################
+# scaler = MinMaxScaler()
+##############################################################################
+
+##############################################################################
+# scaler = StandardScaler()
+##############################################################################
+
+##############################################################################
+# scaler = MaxAbsScaler()
+##############################################################################
+
+##############################################################################
+scaler = RobustScaler()
+##############################################################################
+scaler.fit(x_train) # x 값을  MinMaxScaler으로 실행시킬 준비
+x_train = scaler.fit_transform(x_train) # 0~1 값 변환 사이로변환
+x_test = scaler.transform(x_test) 
+
+
+#2.모델구성
+# model = Sequential()
+# model.add(Dense(200, input_dim=54, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(300, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(300, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(200, activation= 'relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(100, activation= 'relu'))
+# model.add(Dense(7,activation='softmax'))
+
+input1 = Input(shape=(54,))
+dense1 = Dense(200,activation = 'relu',name='ys1')(input1)
+drop1 = Dropout(0.2)(dense1)
+dense2 = Dense(300,activation = 'relu', name= 'ys2')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(300,activation = 'relu', name= 'ys3')(drop2)
+drop3 = Dropout(0.4)(dense3)
+dense4 = Dense(200,activation = 'relu', name= 'ys4')(drop3)
+drop4 = Dropout(0.2)(dense4)
+dense5 = Dense(100,activation = 'relu', name= 'ys5')(drop4)
+output1 = Dense(7,activation='softmax')(dense5)
+
+model = Model(inputs=input1, outputs=output1)
+
+#3.컴파일,훈련
+model.compile(loss = 'categorical_crossentropy',
+              optimizer = 'adam',
+              metrics =['acc']
+              )
+es = EarlyStopping(
+    monitor= 'val_loss',
+    mode= 'auto',
+    patience=50,
+    restore_best_weights=True,
+)
+mcp = ModelCheckpoint(monitor='val_loss',
+                      mode='auto',
+                      save_best_only=True,
+                      filepath = filepath,
+                      verbose=1
+                      )
+start_time =time.time()
+model.fit(x_train,y_train, epochs=2000,batch_size=30000,
+          verbose=1,
+          validation_split=0.3,
+          callbacks =[es,mcp],
+          )
+end_time =time.time()
+
+result = model.evaluate(x_test,y_test,)
+print('loss: ',result[0])
+print('acc: ',round(result[1],2))
+y_predict= model.predict(x_test) 
+
+y_predict = np.argmax(y_predict,axis=1) 
+print(y_predict)#[0 2 0 1 1 2 0 2 0 2 2 1 2 0 0 0 2 0 2 1 0 2 1 1 0 2 1 1 1 2]
+y_test = np.argmax(y_test, axis=1)
+# print(y_test) #[0 2 0 1 1 1 0 2 0 2 2 2 2 0 0 0 2 0 2 1 0 2 1 1 0 2 1 1 1 1]
+# #######################################################
+# y_predict = np.argmax(model.predict(x_test),axis =1)
+# y_test_argmax =np.argmax(y_test,axis=1)
+# ########################################################
+# y_predict = model.predict(x_test)
+# print(y_predict)
+
+
+accuracy_score =accuracy_score(y_test,y_predict)  
+#지금까지는 y_predict 값은 [0.7,0.2,0.1]이런식으로 되어있어서 비교가 불가능함 >>가장큰 수를 1로 바꿔줘야함 그래서 결과를 [1,0,0]으로 변경후 비교 
+print('acc_score :',accuracy_score)
+
+# [1 1 5 ... 1 1 0]
+# acc_score : 0.9412807508720397
