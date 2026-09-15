@@ -56,7 +56,19 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-dropout을 활용한 모델 성능 향상  
 &nbsp;&nbsp;&nbsp;&nbsp;-funtional model을 활용한 기존 model 구현
 
-12일차 
+12일차 (2026.09.15)  
+&nbsp;&nbsp;&nbsp;&nbsp;-CUDA 환경 설정  
+
+| Program | version |
+|:---:|:---:|
+| Nvidia graphic driver | 616.92 |
+| cuda | 11.2 |
+| cudnn | 8.1.1 for cuda 11.2 |
+| 가상환경 | conda create -n tf29x-gpu python=3.10 |
+| python | 3.10 |
+| tensorflow | tensorflow-gpu==2.9.3 |
+
+
 
 
 
