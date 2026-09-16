@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
-from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.datasets import cifar100
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Dropout, Flatten
 from tensorflow.keras.callbacks import EarlyStopping
@@ -12,7 +12,7 @@ import random
 
 
 #1. 데이터
-(x_train,y_train),(x_test, y_test) = cifar10.load_data()
+(x_train,y_train),(x_test, y_test) = cifar100.load_data()
 # plt.imshow(x_train[random.randrange(0,50001)],)
 # plt.show()
 # print(np.unique(y_train,return_counts=True))            #(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), array([6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000],dtype=int64))
@@ -49,8 +49,8 @@ y_test = ohe.fit_transform(y_test.reshape(-1,1))
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(128, (3,3), input_shape = (32,32,3)))                      #(26,26,64)
-model.add(Conv2D(filters=64 , kernel_size=(3,3), activation='relu'))        #(24,24,32)
+model.add(Conv2D(256, (3,3), input_shape = (32,32,3)))                      #(26,26,64)
+model.add(Conv2D(filters=128 , kernel_size=(3,3), activation='relu'))        #(24,24,32)
 model.add(Dropout(0.3))
 model.add(Conv2D(filters=64 , kernel_size=(3,3), activation='relu'))        #(24,24,32)
 model.add(Dropout(0.2))
@@ -63,11 +63,11 @@ model.add(Conv2D(16,(2,2),activation='relu'))                               #(20
 
 model.add(Flatten())                                                        #이후 FC layer와 붙기 위해 한줄로 reshape
 
-model.add(Dense(64, activation='relu'))
-model.add(Dense(units=32, activation='relu'))
+model.add(Dense(256, activation='relu'))
+model.add(Dense(units=128, activation='relu'))
 model.add(Dropout(0.2))
-model.add(Dense(units=16, activation='relu'))
-model.add(Dense(10,activation='softmax'))                                   
+model.add(Dense(units=64, activation='relu'))
+model.add(Dense(100,activation='softmax'))                                   
 
 #3. 컴파일, 훈련
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam',
