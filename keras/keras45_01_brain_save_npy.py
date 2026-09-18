@@ -24,24 +24,24 @@ test_datagen = ImageDataGenerator(
     rescale=1./255,
     )
 
-path_train = './_data/image/cat_dog/training_set/'
-path_test = './_data/image/cat_dog/test_set/'
+path_train = './_data/image/brain/train/'
+path_test = './_data/image/brain/test/'
 
 xy_train = train_datagen.flow_from_directory(
     path_train,                 #경로
     target_size=(100,100),
-    batch_size=10000,                      
+    batch_size=160,                      
     class_mode='binary',            #이진분류
-    color_mode='rgb',
+    color_mode='grayscale',
     shuffle=True,
     )
 
 xy_test = test_datagen.flow_from_directory(
     path_test,
     target_size=(100,100),
-    batch_size=10000,                      
+    batch_size=120,                      
     class_mode='binary',            #이진분류
-    color_mode='rgb',
+    color_mode='grayscale',
     shuffle=False,             # test에서는 필요가 없다
 )
 
@@ -51,16 +51,24 @@ y_train = xy_train[0][1]
 x_test = xy_test[0][0]
 y_test = xy_test[0][1]
 
+np_path = './_data/kaggle_cat_dog_npy/'
+np.save(np_path+'keras45_01_x_train.npy', arr=x_train)
+np.save(np_path+'keras45_01_y_train.npy', arr=y_train)
+np.save(np_path+'keras45_01_x_test.npy', arr=x_test)
+np.save(np_path+'keras45_01_y_test.npy', arr=y_test)
+
+exit()
+
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(32,(5,5),padding='same', activation='relu',input_shape = (100,100,3)))
+model.add(Conv2D(160,(5,5),padding='same', activation='relu',input_shape = (100,100,1)))
 model.add(Dropout(0.2))
 model.add(MaxPooling2D())
-model.add(Conv2D(16,(5,5),padding='same',activation='relu'))
+model.add(Conv2D(80,(5,5),padding='same',activation='relu'))
 model.add(Dropout(0.2))
 model.add(MaxPooling2D())
-model.add(Conv2D(8,(5,5),padding='same',activation='relu'))
+model.add(Conv2D(20,(5,5),padding='same',activation='relu'))
 model.add(Dropout(0.2))
 model.add(MaxPooling2D())
 model.add(GlobalAveragePooling2D())
@@ -79,7 +87,7 @@ es = EarlyStopping(monitor='val_acc',
                    patience=100,
                    restore_best_weights=True)
 model.fit(x_train,y_train,
-          epochs = 2000, batch_size = 400,
+          epochs = 2000, batch_size = 20,
           verbose = 1,
           validation_split = 0.3,
           callbacks = [es])
@@ -102,11 +110,5 @@ acc_score = accuracy_score(y_test,np.round(y_predict))
 print('accuraccy_score: ',acc_score)
 print('소요시간 : ',round(end_time-start_time,2), '초')
 
-
-# batch_size = 5000
-# accuraccy_score:  0.7993079584775087
-# 소요시간 :  731.83 초
-
-# batch_size = 10000
-# accuraccy_score:  0.7834898665348492
-# 소요시간 :  1987.4 초
+# accuraccy_score:  0.9416666666666667
+# 소요시간 :  135.48 초

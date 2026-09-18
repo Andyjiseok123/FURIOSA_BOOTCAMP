@@ -8,53 +8,16 @@ from sklearn.metrics import accuracy_score
 
 #1. 데이터
 
-train_datagen = ImageDataGenerator(
-    rescale = 1./255,
-    # horizontal_flip = True,              #수평반전
-    # vertical_flip= True,                #수직반전
-    # width_shift_range= 0.1,             #평형이동
-    # height_shift_range= 0.1,            #수직이동
-    # rotation_range=5,                   #각도조절
-    # zoom_range=1.2,                     #확대축소
-    # shear_range=0.7,                    #전단변형
-    # fill_mode='nearest',                #채우기
-    )
-
-test_datagen = ImageDataGenerator(
-    rescale=1./255,
-    )
-
-path_train = './_data/image/cat_dog/training_set/'
-path_test = './_data/image/cat_dog/test_set/'
-
-xy_train = train_datagen.flow_from_directory(
-    path_train,                 #경로
-    target_size=(100,100),
-    batch_size=10000,                      
-    class_mode='binary',            #이진분류
-    color_mode='rgb',
-    shuffle=True,
-    )
-
-xy_test = test_datagen.flow_from_directory(
-    path_test,
-    target_size=(100,100),
-    batch_size=10000,                      
-    class_mode='binary',            #이진분류
-    color_mode='rgb',
-    shuffle=False,             # test에서는 필요가 없다
-)
-
-x_train = xy_train[0][0]
-y_train = xy_train[0][1]
-
-x_test = xy_test[0][0]
-y_test = xy_test[0][1]
+np_path = './_data/kaggle_cat_dog_npy/'
+x_train = np.load(np_path+'keras45_01_x_train.npy')
+y_train = np.load(np_path+'keras45_01_y_train.npy')
+x_test = np.load(np_path+'keras45_01_x_test.npy')
+y_test = np.load(np_path+'keras45_01_y_test.npy')
 
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(32,(5,5),padding='same', activation='relu',input_shape = (100,100,3)))
+model.add(Conv2D(32,(5,5),padding='same', activation='relu',input_shape = (300,300,3)))
 model.add(Dropout(0.2))
 model.add(MaxPooling2D())
 model.add(Conv2D(16,(5,5),padding='same',activation='relu'))
