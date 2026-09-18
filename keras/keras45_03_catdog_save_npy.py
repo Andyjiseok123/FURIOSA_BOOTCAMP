@@ -30,7 +30,7 @@ path_test = './_data/image/cat_dog/test_set/'
 start_time = time.time()
 xy_train = train_datagen.flow_from_directory(
     path_train,                 #경로
-    target_size=(300,300),
+    target_size=(100,100),
     batch_size=10000,                      
     class_mode='binary',            #이진분류
     color_mode='rgb',
@@ -39,7 +39,7 @@ xy_train = train_datagen.flow_from_directory(
 
 xy_test = test_datagen.flow_from_directory(
     path_test,
-    target_size=(300,300),
+    target_size=(100,100),
     batch_size=10000,                      
     class_mode='binary',            #이진분류
     color_mode='rgb',

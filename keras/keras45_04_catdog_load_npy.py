@@ -14,10 +14,17 @@ y_train = np.load(np_path+'keras45_01_y_train.npy')
 x_test = np.load(np_path+'keras45_01_x_test.npy')
 y_test = np.load(np_path+'keras45_01_y_test.npy')
 
+# print(x_train.shape)
+# print(y_train.shape)
+# print(x_test.shape)
+# print(y_test.shape)
+
+# exit()
+
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(32,(5,5),padding='same', activation='relu',input_shape = (300,300,3)))
+model.add(Conv2D(32,(5,5),padding='same', activation='relu',input_shape = (100,100,3)))
 model.add(Dropout(0.2))
 model.add(MaxPooling2D())
 model.add(Conv2D(16,(5,5),padding='same',activation='relu'))
