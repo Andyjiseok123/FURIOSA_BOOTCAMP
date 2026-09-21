@@ -81,6 +81,9 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-np.save, np.load를 통한 이미지 데이터화(매번 변환을 통한 시간낭비 없앨 수 있음.)  
 
 16일차 (2026.09.21)  
-&nbsp;&nbsp;&nbsp;&nbsp;-CUDA 환경 설정  
+&nbsp;&nbsp;&nbsp;&nbsp;-레거시 ML 3대장 (XGboost, LGBM, Catboost)  
+&nbsp;&nbsp;&nbsp;&nbsp;-종합적인 모델구성(save/load model, predict other picture)  
+&nbsp;&nbsp;&nbsp;&nbsp;-기존 이미지 바탕으로 데이터 갯수 늘리기(ImageDataGenerator)  
+
 
 
