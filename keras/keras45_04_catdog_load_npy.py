@@ -2,13 +2,13 @@ import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, GlobalAveragePooling2D
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import time
 from sklearn.metrics import accuracy_score
 
 #1. 데이터
 
-np_path = './_data/kaggle_dat_dog/'
+np_path = './_data/kaggle_cat_dog_npy/'
 x_train = np.load(np_path+'keras45_01_x_train.npy')
 y_train = np.load(np_path+'keras45_01_y_train.npy')
 x_test = np.load(np_path+'keras45_01_x_test.npy')
@@ -48,12 +48,25 @@ es = EarlyStopping(monitor='val_acc',
                    mode='max',
                    patience=100,
                    restore_best_weights=True)
+
+mcp = ModelCheckpoint(monitor="val_acc",
+                      mode='max',
+                      verbose=0,
+                      save_best_only=True,
+                      filepath=np_path,
+                      )
+
 model.fit(x_train,y_train,
           epochs = 2000, batch_size = 400,
           verbose = 1,
           validation_split = 0.3,
-          callbacks = [es])
+          callbacks = [es,mcp])
 end_time = time.time()
+
+# path = './_save/keras45/'  
+# model.save_weights(path + 'keras29_5_save_weights1.weights.h5') #가중치 세이브
+# model.save(path + 'keras45_save_model_cat_dog.keras') #모델 세이브
+# model = load_model(path + 'keras29_1_save_model.keras') #저장된 모델 불러오기
 
 
 #4. 평가, 예측

@@ -64,11 +64,5 @@ acc_score = accuracy_score(y_test,y_predict)
 print('accuraccy_score: ',acc_score)
 print('소요시간 : ',round(end_time-start_time,2), '초')
 
-
-# batch_size = 5000
-# accuraccy_score:  0.7993079584775087
-# 소요시간 :  731.83 초
-
-# batch_size = 10000
-# accuraccy_score:  0.7834898665348492
-# 소요시간 :  1987.4 초
+# accuraccy_score:  1.0
+# 소요시간 :  109.3 초
