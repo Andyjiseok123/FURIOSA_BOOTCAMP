@@ -69,9 +69,18 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 | tensorflow | tensorflow-gpu==2.9.3 |
 | numpy | uninstall and install 1.26.4 version |
 
+13일차 (2026.09.16)  
+&nbsp;&nbsp;&nbsp;&nbsp;-CNN 기초  
 
+14일차 (2026.09.17)  
+&nbsp;&nbsp;&nbsp;&nbsp;-conv2D에서 사용할 수 있는 option : padding, stride    
+&nbsp;&nbsp;&nbsp;&nbsp;-Maxpooing2D와 GlobalAveragePooling2D  
 
+15일차 (2026.09.18)  
+&nbsp;&nbsp;&nbsp;&nbsp;-ImageDateGenerator : 기존의 이미지 데이터를 좌우반전, 상하반전등을 이용하여 데이터셋을 늘릴 수 있는 방법  
+&nbsp;&nbsp;&nbsp;&nbsp;-np.save, np.load를 통한 이미지 데이터화(매번 변환을 통한 시간낭비 없앨 수 있음.)  
 
-
+16일차 (2026.09.21)  
+&nbsp;&nbsp;&nbsp;&nbsp;-CUDA 환경 설정  
 
 
