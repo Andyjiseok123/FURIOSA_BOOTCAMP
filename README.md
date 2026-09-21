@@ -53,7 +53,7 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 11일차 (2026.09.14)  
 &nbsp;&nbsp;&nbsp;&nbsp;-Model check point를 활용한 train 이력 저장  
 &nbsp;&nbsp;&nbsp;&nbsp;-지금까지 사용한 dataset을 활용한 실습  
-&nbsp;&nbsp;&nbsp;&nbsp;-dropout을 활용한 모델 성능 향상  
+&nbsp;&nbsp;&nbsp;&nbsp;-dropout을 활용한 모델 성능 향상(과적합을 줄임)  
 &nbsp;&nbsp;&nbsp;&nbsp;-funtional model을 활용한 기존 model 구현
 
 12일차 (2026.09.15)  
