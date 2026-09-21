@@ -7,19 +7,11 @@ import time
 from sklearn.metrics import accuracy_score
 
 #1. 데이터
-
-np_path = './_data/kaggle_dat_dog/'
-x_train = np.load(np_path+'keras45_01_x_train.npy')
-y_train = np.load(np_path+'keras45_01_y_train.npy')
-x_test = np.load(np_path+'keras45_01_x_test.npy')
-y_test = np.load(np_path+'keras45_01_y_test.npy')
-
-# print(x_train.shape)
-# print(y_train.shape)
-# print(x_test.shape)
-# print(y_test.shape)
-
-# exit()
+np_path = './_data/horse_human_npy/'
+x_train = np.load(np_path+'keras46_01_x_train.npy')
+y_train = np.load(np_path+'keras46_01_y_train.npy')
+x_test = np.load(np_path+'keras46_01_x_test.npy')
+y_test = np.load(np_path+'keras46_01_y_test.npy')
 
 
 #2. 모델 구성
@@ -36,12 +28,12 @@ model.add(MaxPooling2D())
 model.add(GlobalAveragePooling2D())
 model.add(Dense(16,activation = 'relu'))
 model.add(Dense(8,activation = 'relu'))
-model.add(Dense(1,activation = 'sigmoid'))
+model.add(Dense(2,activation = 'softmax'))
 # model.summary()
 # exit()
 
 #3. 컴파일, 훈련
-model.compile(loss = 'binary_crossentropy', optimizer = 'adam',
+model.compile(loss = 'categorical_crossentropy', optimizer = 'adam',
               metrics = ['acc'])
 start_time = time.time()
 es = EarlyStopping(monitor='val_acc',
@@ -51,7 +43,7 @@ es = EarlyStopping(monitor='val_acc',
 model.fit(x_train,y_train,
           epochs = 2000, batch_size = 400,
           verbose = 1,
-          validation_split = 0.3,
+          validation_split = 15/85,
           callbacks = [es])
 end_time = time.time()
 
@@ -65,18 +57,12 @@ print('loss: ',loss[0])
 print('acc: ',loss[1])
 
 y_predict = model.predict(x_test)
-# y_predict = np.argmax(y_predict, axis=1).reshape(-1,1)
-# y_test = np.argmax(y_test,axis=1).reshape(-1,1)
+y_predict = np.argmax(y_predict, axis=1).reshape(-1,1)
+y_test = np.argmax(y_test,axis=1).reshape(-1,1)
 
-acc_score = accuracy_score(y_test,np.round(y_predict))
+acc_score = accuracy_score(y_test,y_predict)
 print('accuraccy_score: ',acc_score)
 print('소요시간 : ',round(end_time-start_time,2), '초')
 
-
-# batch_size = 5000
-# accuraccy_score:  0.7993079584775087
-# 소요시간 :  731.83 초
-
-# batch_size = 10000
-# accuraccy_score:  0.7834898665348492
-# 소요시간 :  1987.4 초
+# accuraccy_score:  1.0
+# 소요시간 :  96.54 초
