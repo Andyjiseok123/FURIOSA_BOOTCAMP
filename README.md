@@ -85,5 +85,7 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-종합적인 모델구성(save/load model, predict other picture)  
 &nbsp;&nbsp;&nbsp;&nbsp;-기존 이미지 바탕으로 데이터 갯수 늘리기(ImageDataGenerator)  
 
-
-
+17일차 (2026.09.22)  
+&nbsp;&nbsp;&nbsp;&nbsp;-ImageDataGenerator를 통한 데이터 증대(augmentation)  
+&nbsp;&nbsp;&nbsp;&nbsp;-augmentation 실습  
+&nbsp;&nbsp;&nbsp;&nbsp;-learning rate 개념 설명  

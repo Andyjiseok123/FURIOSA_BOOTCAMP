@@ -78,10 +78,10 @@ y_train =  np.concatenate((y_train,y_augmented))
 # x_train = x_train/255.
 # x_test = x_test/255.
 
-from sklearn.preprocessing import OneHotEncoder
-ohe = OneHotEncoder(sparse_output=False)
-y_train = ohe.fit_transform(y_train.reshape(-1,1))
-y_test = ohe.fit_transform(y_test.reshape(-1,1))
+# from sklearn.preprocessing import OneHotEncoder
+# ohe = OneHotEncoder(sparse_output=False)
+# y_train = ohe.fit_transform(y_train.reshape(-1,1))
+# y_test = ohe.fit_transform(y_test.reshape(-1,1))
 
 #2. 모델 구성
 model = Sequential()
@@ -103,14 +103,14 @@ model.add(Dense(16, activation='relu'))
 model.add(Dense(units=8, activation='relu'))
 model.add(Dropout(0.2))
 model.add(Dense(units=4, activation='relu'))
-model.add(Dense(2,activation='softmax'))    
+model.add(Dense(1,activation='sigmoid'))    
 
 model.summary()
 # exit()
 
 #3. 컴파일, 훈련
 import time
-model.compile(loss = 'categorical_crossentropy', optimizer = 'adam',
+model.compile(loss = 'binary_crossentropy', optimizer = 'adam',
               metrics = ['acc'])
 start_time = time.time()
 es = EarlyStopping(monitor='val_loss',
@@ -132,13 +132,13 @@ print('loss: ',loss[0])
 print('acc: ',loss[1])
 
 y_predict = model.predict(x_test)
-y_predict = np.argmax(y_predict, axis=1).reshape(-1,1)
-y_test = np.argmax(y_test,axis=1).reshape(-1,1)
+# y_predict = np.argmax(y_predict, axis=1).reshape(-1,1)
+# y_test = np.argmax(y_test,axis=1).reshape(-1,1)
 from sklearn.metrics import accuracy_score
-acc_score = accuracy_score(y_test,y_predict)
+acc_score = accuracy_score(y_test,np.round(y_predict))
 print('accuraccy_score: ',acc_score)
 print('소요시간 : ',round(end_time-start_time,2), '초')
 
 
-# accuraccy_score:  0.9144
-# 소요시간 :  1788.31 초
+# accuraccy_score:  0.7085377821393523
+# 소요시간 :  1085.39 초
