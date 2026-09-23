@@ -89,3 +89,7 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-ImageDataGenerator를 통한 데이터 증대(augmentation)  
 &nbsp;&nbsp;&nbsp;&nbsp;-augmentation 실습  
 &nbsp;&nbsp;&nbsp;&nbsp;-learning rate 개념 설명  
+
+18일차 (2026.09.23)  
+&nbsp;&nbsp;&nbsp;&nbsp;-ImageDataGenerator를 통한 데이터 증대(augmentation)  
+&nbsp;&nbsp;&nbsp;&nbsp;-augmentation 실습  

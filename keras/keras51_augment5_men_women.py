@@ -142,3 +142,6 @@ print('소요시간 : ',round(end_time-start_time,2), '초')
 
 # accuraccy_score:  0.7085377821393523
 # 소요시간 :  1085.39 초
+
+# accuraccy_score:  0.7769872423945045
+# 소요시간 :  2438.09 초
