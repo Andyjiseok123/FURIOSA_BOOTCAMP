@@ -111,18 +111,25 @@ model.summary()
 #3. 컴파일, 훈련
 import time
 from keras.optimizers import Adam
-model.compile(loss = 'binary_crossentropy', optimizer = Adam(learning_rate=0.0005),
+model.compile(loss = 'binary_crossentropy', optimizer = Adam(learning_rate=0.01),
               metrics = ['acc'])
 start_time = time.time()
 es = EarlyStopping(monitor='val_loss',
                    mode='min',
                    patience=50,
                    restore_best_weights=True)
+from keras.callbacks import ReduceLROnPlateau
+rlr = ReduceLROnPlateau(monitor='val_loss',
+                  mode='auto',
+                  patience=20,
+                  verbose=1,
+                  factor=0.5,
+                  )
 model.fit(x_train,y_train,
           epochs = 2000, batch_size = 500,
           verbose = 1,
           validation_split = 0.3,
-          callbacks = [es])
+          callbacks = [es,rlr])
 end_time = time.time()
 
 #4. 평가, 예측

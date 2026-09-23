@@ -1,4 +1,4 @@
-from sklearn.datasets import fetch_covtype
+from sklearn.datasets import load_digits
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -8,53 +8,47 @@ from tensorflow.keras.layers import Dense
 import time
 from sklearn.metrics import accuracy_score
 
+#1데이터
 
-#1.데이터
-datasets = fetch_covtype()
+datasets = load_digits()
 # print(datasets)
-# shape=(581012, 54))  ,shape=(581012,)
+
 
 x = datasets.data
 y = datasets.target
+# print(x.shape,y.shape) #(1797, 64) (1797,)
 
-# print(x.shape,y.shape)  #(581012, 54) (581012,)
-print(np.unique(y,return_counts=True)) 
-
-# from tensorflow.keras.utils import to_categorical 
-# y = to_categorical(y)
-# print(y)
-# print(y.shape) #(581012, 8)
-'''
-#(array([1, 2, 3, 4, 5, 6, 7], dtype=int32),
-#array([211840, 283301,  35754,   2747,   9493,  17367,  20510]))
->>>>.
-to_categorical  쓰면 0~부터 컬럼을 만들어서 만약 1,2,3,4,5,6,7의 컬럼이 형성되어있으면 
-0,1,2,3,4,5,6,7,8로 늘어남 
-'''
 y = pd.get_dummies(y,dtype=int)
-# print(y.shape) #(581012, 7)
+# print(y)
 
+# print(np.unique(y))  #[0 1]
+# print(np.unique(y,return_counts=True)) #(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), array([178, 182, 177, 183, 181, 182, 181, 179, 174, 180]))
+# print(pd.Series(y).value_counts())
 
-x_train,x_test,y_train,y_test = train_test_split(
+x_train,x_test,y_train,y_test =train_test_split(
     x,y,
-    train_size=0.7,
     random_state=333,
-    shuffle=True,
-    stratify=y,
-    )
-from sklearn.preprocessing import MinMaxScaler,StandardScaler,MaxAbsScaler
+    train_size=0.8,
+    stratify=y,  #x,y데이터를 나눌떄 stratify=y이걸안넣으면 x,y서로 데이터 크기가 달랐을떄 비율편차가 생길수있음
+)
+from sklearn.preprocessing import MinMaxScaler,StandardScaler,MaxAbsScaler 
 from sklearn.preprocessing import RobustScaler
 ##############################################################################
 # scaler = MinMaxScaler()
 ##############################################################################
 
+
+
 ##############################################################################
 # scaler = StandardScaler()
 ##############################################################################
 
+
+
 ##############################################################################
 # scaler = MaxAbsScaler()
 ##############################################################################
+
 
 ##############################################################################
 scaler = RobustScaler()
@@ -63,15 +57,14 @@ scaler.fit(x_train) # x 값을  MinMaxScaler으로 실행시킬 준비
 x_train = scaler.fit_transform(x_train) # 0~1 값 변환 사이로변환
 x_test = scaler.transform(x_test) 
 
-
 #2.모델구성
 model = Sequential()
-model.add(Dense(200, input_dim=54, activation= 'relu'))
-model.add(Dense(300, activation= 'relu'))
-model.add(Dense(300, activation= 'relu'))
-model.add(Dense(200, activation= 'relu'))
-model.add(Dense(100, activation= 'relu'))
-model.add(Dense(7,activation='softmax'))
+model.add(Dense(30, input_dim=64, activation= 'relu'))
+model.add(Dense(50, activation= 'relu'))
+model.add(Dense(100,activation= 'relu'))
+model.add(Dense(50, activation= 'relu'))
+model.add(Dense(30, activation= 'relu'))
+model.add(Dense(10,activation='softmax'))
 
 #3.컴파일,훈련
 from keras.optimizers import Adam
@@ -82,14 +75,21 @@ model.compile(loss = 'categorical_crossentropy',
 es = EarlyStopping(
     monitor= 'val_loss',
     mode= 'auto',
-    patience=50,
+    patience=200,
     restore_best_weights=True,
 )
+from keras.callbacks import ReduceLROnPlateau
+rlr = ReduceLROnPlateau(monitor='val_loss',
+                  mode='auto',
+                  patience=20,
+                  verbose=1,
+                  factor=0.5,
+                  )
 start_time =time.time()
-model.fit(x_train,y_train, epochs=2000,batch_size=30000,
+model.fit(x_train,y_train, epochs=500,batch_size=300,
           verbose=1,
           validation_split=0.3,
-          callbacks =[es],
+          callbacks =[es,rlr],
           )
 end_time =time.time()
 
@@ -99,7 +99,7 @@ print('acc: ',round(result[1],2))
 y_predict= model.predict(x_test) 
 
 y_predict = np.argmax(y_predict,axis=1) 
-print(y_predict)#[0 2 0 1 1 2 0 2 0 2 2 1 2 0 0 0 2 0 2 1 0 2 1 1 0 2 1 1 1 2]
+# print(y_predict)#[0 2 0 1 1 2 0 2 0 2 2 1 2 0 0 0 2 0 2 1 0 2 1 1 0 2 1 1 1 2]
 y_test = np.argmax(y_test, axis=1)
 # print(y_test) #[0 2 0 1 1 1 0 2 0 2 2 2 2 0 0 0 2 0 2 1 0 2 1 1 0 2 1 1 1 1]
 # #######################################################
@@ -115,32 +115,45 @@ accuracy_score =accuracy_score(y_test,y_predict)
 print('acc_score :',accuracy_score)
 print('걸린시간: ', round(end_time-start_time, 2),'초')
 
+"""
+2차시도----스케일러 적용----
+random : 333
+train_size = 0.8
+epochs = 500
+batch_size = 300
+결과
+loss:  0.10323592275381088
+acc:  0.96
+12/12 ━━━━━━━━━━━━━━━━━━━━ 0s 4ms/step 
+acc_score : 0.9555555555555556
+걸린시간:  8.13 초
+"""
+'''
+# 3차시도
+# loss:  0.13404762744903564
+# acc:  0.97
+# 12/12 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step 
+# acc_score : 0.9694444444444444
+# 걸린시간:  12.46 초
+
+#4차시도
+# loss:  0.09416898339986801
+# acc:  0.97
+# 12/12 ━━━━━━━━━━━━━━━━━━━━ 0s 4ms/step 
+# acc_score : 0.9666666666666667
+# 걸린시간:  17.67 초
+'''
+
 
 '''
-loss:  0.16669827699661255
-acc:  0.94
-5447/5447 ━━━━━━━━━━━━━━━━━━━━ 3s 610us/step 
-acc_score : 0.9417684046263999
-걸린시간:  1428.33 초
-'''
-'''
-2차시도 standard-scaler
-loss:  0.1539806574583053
-acc:  0.94
-5447/5447 ━━━━━━━━━━━━━━━━━━━━ 3s 610us/step 
-acc_score : 0.945250826142831
-걸린시간:  455.52 초
-'''
-'''
-3차시도 -maxabs-scaler
-loss:  0.17319022119045258
-acc:  0.94
-5447/5447 ━━━━━━━━━━━━━━━━━━━━ 3s 577us/step 
-[1 1 5 ... 1 1 0]
-acc_score : 0.9378557003855333
-걸린시간:  2283.56 초
+# 5차시도--standard-
+loss:  0.09308037161827087
+acc:  0.97
+12/12 ━━━━━━━━━━━━━━━━━━━━ 0s 4ms/step 
+acc_score : 0.9666666666666667
+걸린시간:  15.6 초
 
 '''
 
-# acc_score : 0.9360485129429044
-# 걸린시간:  892.01 초
+# acc_score : 0.95
+# 걸린시간:  8.3 초

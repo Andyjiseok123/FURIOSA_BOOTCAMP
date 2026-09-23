@@ -3,13 +3,13 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.datasets import cifar100
+from tensorflow.keras.datasets import fashion_mnist
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, Dense, Dropout, MaxPooling2D, GlobalAveragePooling2D
 from tensorflow.keras.callbacks import EarlyStopping
+import matplotlib.pyplot as plt
 
-(x_train, y_train),(x_test,y_test) = cifar100.load_data()
-
+(x_train, y_train),(x_test,y_test) = fashion_mnist.load_data()
 
 datagen = ImageDataGenerator(
     rescale=1./255,
@@ -40,7 +40,7 @@ print(x_augmented.shape,y_augmented.shape)      #(40000, 28, 28) (40000,)
 x_augmented = x_augmented.reshape(
     x_augmented.shape[0],
     x_augmented.shape[1],
-    x_augmented.shape[2],3)
+    x_augmented.shape[2],1)
 
 x_augmented = datagen.flow(
     x_augmented, y_augmented,
@@ -50,8 +50,8 @@ x_augmented = datagen.flow(
 
 print(x_augmented.shape)       # (40000, 28, 28, 1)
 
-# x_train = x_train.reshape(60000,28,28,1)
-# x_test = x_test.reshape(10000,28,28,1)
+x_train = x_train.reshape(60000,28,28,1)
+x_test = x_test.reshape(10000,28,28,1)
 
 x_train =  np.concatenate((x_train,x_augmented))
 y_train =  np.concatenate((y_train,y_augmented))
@@ -69,9 +69,9 @@ y_test = ohe.fit_transform(y_test.reshape(-1,1))
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(64, (3,3), padding='same', input_shape = (32,32,3)))                      #(26,26,64)
+model.add(Conv2D(64, (5,5), padding='same', input_shape = (28,28,1)))                      #(26,26,64)
 model.add(MaxPooling2D())
-model.add(Conv2D(filters=32 , kernel_size=(3,3), padding='same', activation='relu'))        #(24,24,32)
+model.add(Conv2D(filters=32 , kernel_size=(5,5), padding='same', activation='relu'))        #(24,24,32)
 model.add(Dropout(0.5))
 model.add(Conv2D(32,(3,3), padding='same',activation='relu'))                               #(23,23,32)
 model.add(MaxPooling2D())
@@ -84,10 +84,10 @@ model.add(Conv2D(16,(2,2), padding='same',activation='relu'))                   
 model.add(GlobalAveragePooling2D())                                                        #이후 FC layer와 붙기 위해 한줄로 reshape
 
 model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
+model.add(Dense(units=32, activation='relu'))
 model.add(Dropout(0.2))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(100,activation='softmax'))    
+model.add(Dense(units=16, activation='relu'))
+model.add(Dense(10,activation='softmax'))    
 
 # model.summary()
 # exit()
@@ -98,15 +98,22 @@ from keras.optimizers import Adam
 model.compile(loss = 'categorical_crossentropy', optimizer = Adam(learning_rate=0.0005),
               metrics = ['acc'])
 start_time = time.time()
-es = EarlyStopping(monitor='val_acc',
-                   mode='max',
+es = EarlyStopping(monitor='val_loss',
+                   mode='min',
                    patience=50,
                    restore_best_weights=True)
+from keras.callbacks import ReduceLROnPlateau
+rlr = ReduceLROnPlateau(monitor='val_loss',
+                  mode='auto',
+                  patience=20,
+                  verbose=1,
+                  factor=0.5,
+                  )
 model.fit(x_train,y_train,
           epochs = 2000, batch_size = 1000,
           verbose = 1,
-          validation_split = 15/85,
-          callbacks = [es])
+          validation_split = 0.3,
+          callbacks = [es,rlr])
 end_time = time.time()
 
 #4. 평가, 예측

@@ -3,12 +3,12 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.datasets import cifar100
+from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, Dense, Dropout, MaxPooling2D, GlobalAveragePooling2D
 from tensorflow.keras.callbacks import EarlyStopping
 
-(x_train, y_train),(x_test,y_test) = cifar100.load_data()
+(x_train, y_train),(x_test,y_test) = cifar10.load_data()
 
 
 datagen = ImageDataGenerator(
@@ -87,7 +87,7 @@ model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dropout(0.2))
 model.add(Dense(16, activation='relu'))
-model.add(Dense(100,activation='softmax'))    
+model.add(Dense(10,activation='softmax'))    
 
 # model.summary()
 # exit()
@@ -102,11 +102,18 @@ es = EarlyStopping(monitor='val_acc',
                    mode='max',
                    patience=50,
                    restore_best_weights=True)
+from keras.callbacks import ReduceLROnPlateau
+rlr = ReduceLROnPlateau(monitor='val_loss',
+                  mode='auto',
+                  patience=20,
+                  verbose=1,
+                  factor=0.5,
+                  )
 model.fit(x_train,y_train,
           epochs = 2000, batch_size = 1000,
           verbose = 1,
           validation_split = 15/85,
-          callbacks = [es])
+          callbacks = [es,rlr])
 end_time = time.time()
 
 #4. 평가, 예측

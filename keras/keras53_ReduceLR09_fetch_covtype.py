@@ -85,11 +85,18 @@ es = EarlyStopping(
     patience=50,
     restore_best_weights=True,
 )
+from keras.callbacks import ReduceLROnPlateau
+rlr = ReduceLROnPlateau(monitor='val_loss',
+                  mode='auto',
+                  patience=20,
+                  verbose=1,
+                  factor=0.5,
+                  )
 start_time =time.time()
 model.fit(x_train,y_train, epochs=2000,batch_size=30000,
           verbose=1,
           validation_split=0.3,
-          callbacks =[es],
+          callbacks =[es,rlr],
           )
 end_time =time.time()
 
