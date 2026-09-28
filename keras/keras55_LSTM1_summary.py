@@ -1,6 +1,6 @@
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Dense, SimpleRNN, LSTM
+from keras.layers import Dense, SimpleRNN, LSTM, GRU
 
 #1. 데이터
 datasets = np.array([1,2,3,4,5,6,7,8,9,10])
@@ -24,7 +24,7 @@ x = x.reshape(x.shape[0],
 #2. 모델 구성
 model = Sequential()
 # model.add(SimpleRNN(units=10, input_shape=(3,1)))       # 3차원으로 들어가서 2(1)차원으로 나옴 -> 바로 Dense와 연결가능
-model.add(LSTM(units=3, input_shape=(3,1)))                
+model.add(GRU(10, input_shape=(3,1)))               
 model.add(Dense(7,activation='relu'))
 model.add(Dense(1))
 
