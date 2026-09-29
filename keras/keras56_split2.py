@@ -6,7 +6,7 @@ from keras.optimizers import Adam
 
 a = np.array([[1,2,3,4,5,6,7,8,9,10],
              [9,8,7,6,5,4,3,2,1,0],]).T
-size=5
+size=3
 
 def split_x(dataset, size):
     x = []
@@ -26,7 +26,7 @@ x,y = split_x(a,size)
 
 #2. 모델 구성
 model = Sequential()
-model.add(LSTM(10,input_shape = (5,2)))
+model.add(LSTM(10,input_shape = (3,2)))
 model.add(Dense(12))
 model.add(Dropout(0.2))
 model.add(Dense(12))
