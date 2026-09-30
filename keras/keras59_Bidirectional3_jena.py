@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from my_lib import split_x
 from keras.models import Sequential
-from keras.layers import LSTM, Dense, Dropout
+from keras.layers import LSTM, Dense, Dropout, Bidirectional, SimpleRNN
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from keras.optimizers import Adam
 from sklearn.preprocessing import MinMaxScaler
@@ -57,9 +57,7 @@ y_train = split_x(y_train,time_step)
 
 #2. 모델 구성
 model = Sequential()
-model.add(LSTM(units=200, input_shape=(144,13),return_sequences=True))          #return_sequences=true : 은닉층의 값이 다음 LSTM같은 layer로 넘어가짐
-model.add(LSTM(100,return_sequences=True))
-model.add(LSTM(100))
+model.add(Bidirectional(SimpleRNN(units=200), input_shape=(144,13)))          #return_sequences=true : 은닉층의 값이 다음 LSTM같은 layer로 넘어가짐
 model.add(Dense(72))
 model.add(Dense(144))
 # model.summary()
