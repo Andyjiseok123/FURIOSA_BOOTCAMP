@@ -43,6 +43,8 @@ x_train = x[:-288]
 y_train = y[144:-144]
 x_test = x[-288:-144]
 y_test = y[-144:]
+y_train = y_train/(2*np.pi)
+y_test = y_test/(2*np.pi)
 # print(x_train.shape)            #(420263, 13)
 # print(y_train.shape)            #(420263,)
 # print(x_test.shape)             #(144, 13)
@@ -58,7 +60,7 @@ y_train = split_x(y_train,time_step)
 #2. 모델 구성
 model = Sequential()
 model.add(Bidirectional(SimpleRNN(units=200), input_shape=(144,13)))          #return_sequences=true : 은닉층의 값이 다음 LSTM같은 layer로 넘어가짐
-model.add(Dense(72))
+model.add(Dense(288))
 model.add(Dense(144))
 # model.summary()
 
