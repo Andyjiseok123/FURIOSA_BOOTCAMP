@@ -18,7 +18,8 @@ from langchain_openai import OpenAIEmbeddings
 embeddings = OpenAIEmbeddings(
     model="text-embedding-3-small",
     api_key=api_key,
-    base_url=base_url
+    base_url=base_url,
+    dimensions=5,
 )
 
 vector = embeddings.embed_query(prompt)
