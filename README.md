@@ -97,3 +97,15 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-GRU  
 &nbsp;&nbsp;&nbsp;&nbsp;-시계열 data split    
 
+20일차 (2026.09.29)  
+&nbsp;&nbsp;&nbsp;&nbsp;-split 함수를 통한 time step을 자르기  
+&nbsp;&nbsp;&nbsp;&nbsp;-jena data    
+
+21일차 (2026.09.30)  
+&nbsp;&nbsp;&nbsp;&nbsp;-RAG   
+&nbsp;&nbsp;&nbsp;&nbsp;-api key 다루기   
+&nbsp;&nbsp;&nbsp;&nbsp;-Bidirectional simpleRNN   
+
+22일차 (2026.10.01)  
+&nbsp;&nbsp;&nbsp;&nbsp;-Tokenizer  
+&nbsp;&nbsp;&nbsp;&nbsp;-Embedding    
