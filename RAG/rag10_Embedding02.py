@@ -19,7 +19,7 @@ embeddings = OpenAIEmbeddings(
     model="text-embedding-3-small",
     api_key=api_key,
     base_url=base_url,
-    dimensions=5,
+    dimensions=5,                               #dimension 조절이 가능함
 )
 
 vector = embeddings.embed_query(prompt)

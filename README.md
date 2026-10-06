@@ -107,5 +107,10 @@ FURIOSA BOOT CAMP AI AGENT STUDY
 &nbsp;&nbsp;&nbsp;&nbsp;-Bidirectional simpleRNN   
 
 22일차 (2026.10.01)  
-&nbsp;&nbsp;&nbsp;&nbsp;-Tokenizer  
+&nbsp;&nbsp;&nbsp;&nbsp;-Tokenizer   
 &nbsp;&nbsp;&nbsp;&nbsp;-Embedding    
+
+23일차 (2026.10.02)  
+&nbsp;&nbsp;&nbsp;&nbsp;-----   
+&nbsp;&nbsp;&nbsp;&nbsp;-----
+
