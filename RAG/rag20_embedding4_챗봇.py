@@ -8,38 +8,49 @@ from glob import glob
 from dotenv import load_dotenv
 load_dotenv()
 
+
 api_key = os.environ["MONOROUTER_API_KEY"].strip()
 base_url = "https://monogpt.kr/api/monorouter/v1/"
 
-embeddings = OpenAIEmbeddings(
-    model="text-embedding-3-small",
-    api_key=api_key,
-    base_url=base_url,
+# embeddings = OpenAIEmbeddings(
+#     model="text-embedding-3-small",
+#     api_key=api_key,
+#     base_url=base_url,
+# )
+from langchain_huggingface.embeddings import HuggingFaceEmbeddings
+# embeddings = HuggingFaceEmbeddings(
+#     model_name="BAAI/bge-m3",
+#     model_kwargs={
+#         "device" : "cpu",           #GPU로 하고싶을때는 cuda 다만 pytorch와 맞는 버전의 cuda가 깔려있어야함
+#         "local_files_only" : True
+#     }
+# )
+
+embeddings = HuggingFaceEmbeddings(
+    model_name="Qwen/Qwen3-Embedding-0.6B",
+    model_kwargs={
+        "device" : "cpu",           #GPU로 하고싶을때는 cuda 다만 pytorch와 맞는 버전의 cuda가 깔려있어야함
+        "local_files_only" : True #한번 parameter를 받으면 이 옵션을 켜서 실행시간 단축 가능
+    }
 )
 
-DB_PATH = "./_db/Faiss17/"
+DB_PATH = "./_db/Faiss19/"
 
-# vector_store = Chroma(
-#     # documents=texts,
-#     embedding_function=embeddings,
-#     persist_directory=DB_PATH,
-#     collection_name="chroma12",
-# )
 vector_store = FAISS.load_local(
     folder_path=DB_PATH,
-    index_name='faiss_index17',
+    index_name='faiss_index19',
     embeddings=embeddings,
     allow_dangerous_deserialization=True
     )
 
-query = "삼성전자의 창업주는 누구인가요?"
+# query = "삼성전자의 창업주는 누구인가요?"
 retriever = vector_store.as_retriever(search_kwarges={"k":2})
-aaa = retriever.invoke(query)
+# aaa = retriever.invoke(query)
 
 from langchain_openai import ChatOpenAI
 
 model = ChatOpenAI(
-    model="gpt-5.6-terra",
+    model="gemini-3.5-flash",
     temperature=0, #0:있는 그대로, 1:창의적으로
     max_completion_tokens=1000,
     api_key=api_key,

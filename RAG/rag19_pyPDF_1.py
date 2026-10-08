@@ -1,10 +1,17 @@
-# 11-1 copy
+from langchain_community.document_loaders import TextLoader, PyPDFLoader
+
+path = './_data/'
+file_name = 'Attention is all you need.pdf'
+pdf_loader = PyPDFLoader(path + file_name)
+pdf_docs = pdf_loader.load()
+
+# print(type(pdf_docs))           # <class 'list'>
+# print(len(pdf_docs))            # 15
+# print(pdf_docs)
 
 import os
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter, TextSplitter
-from langchain_chroma import Chroma
-
 import faiss
 from langchain_community.vectorstores import FAISS
 from langchain_community.docstore.in_memory import InMemoryDocstore
@@ -18,12 +25,7 @@ api_key = os.environ["MONOROUTER_API_KEY"].strip()
 base_url = "https://monogpt.kr/api/monorouter/v1"
 
 #1. 데이터 불러오기
-path = './_data/rag_data/'
-loader1 = TextLoader(path + "samsung_outlook.txt",encoding='utf-8')
-loader2 = TextLoader(path + "nvidia_outlook.txt",encoding='utf-8')
-
-print(type(loader1))
-exit()
+# loader2 = TextLoader(path + "nvidia_outlook.txt",encoding='utf-8')
 
 #2. 데이터 자르기.
 text_splitter = RecursiveCharacterTextSplitter(
@@ -32,8 +34,7 @@ text_splitter = RecursiveCharacterTextSplitter(
     separators=["\n\n","\n"," ",""],
 )
 
-split_doc1 = loader1.load_and_split(text_splitter)
-split_doc2 = loader2.load_and_split(text_splitter)
+split_pdf = text_splitter.split_documents(pdf_docs)
 
 # print(split_doc1)
 # print(len(split_doc1),len(split_doc2))      #9 9
@@ -49,10 +50,10 @@ embeddings = OpenAIEmbeddings(
 ########################## 여기부터 faiss #################################
 faiss_index = faiss.IndexFlatL2(len(embeddings.embed_query("hello world")))
 # faiss_index = faiss.IndexFlatL2(1536)
-print("FAISS 인덱스 초기화 준비 완료")
+# print("FAISS 인덱스 초기화 준비 완료")
 
 # FAISS 벡터 저장소의 벡터 차원 수 (임베딩 차원 수)
-print(faiss_index.d)        # 1536
+# print(faiss_index.d)        # 1536
 
 faiss_db = FAISS(
     embedding_function=embeddings,
@@ -68,14 +69,14 @@ print(faiss_db.index.ntotal)        # 0
 #######################################################
 
 db = FAISS.from_documents(
-    documents=split_doc1+split_doc2,
+    documents=split_pdf,
     embedding=embeddings,
 )
 
-DB_PATH = './_db/Faiss17'
+DB_PATH = './_db/Faiss19'
 db.save_local(
     folder_path=DB_PATH,
-    index_name='faiss_index17'
+    index_name='faiss_index19'
 )
 
 # faiss_index17.faiss와 faiss_index17.pkl 파일 생성

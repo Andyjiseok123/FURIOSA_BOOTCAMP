@@ -17,24 +17,18 @@ embeddings = OpenAIEmbeddings(
     base_url=base_url,
 )
 
-DB_PATH = "./_db/Faiss17/"
+DB_PATH = "./_db/Faiss19/"
 
-# vector_store = Chroma(
-#     # documents=texts,
-#     embedding_function=embeddings,
-#     persist_directory=DB_PATH,
-#     collection_name="chroma12",
-# )
 vector_store = FAISS.load_local(
     folder_path=DB_PATH,
-    index_name='faiss_index17',
+    index_name='faiss_index19',
     embeddings=embeddings,
     allow_dangerous_deserialization=True
     )
 
-query = "삼성전자의 창업주는 누구인가요?"
+# query = "삼성전자의 창업주는 누구인가요?"
 retriever = vector_store.as_retriever(search_kwarges={"k":2})
-aaa = retriever.invoke(query)
+# aaa = retriever.invoke(query)
 
 from langchain_openai import ChatOpenAI
 
