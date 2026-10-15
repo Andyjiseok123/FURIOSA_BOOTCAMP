@@ -53,7 +53,7 @@ for model_i in model_list:
     x_test = x_test/255.
 
     #3. 컴파일 훈련
-    model.compile(loss='sparse_categorical_crossentrpy', optimizer='adam', metrics=['acc'])     #onehot encoding 안해줘서 loss를 저거 씀
+    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['acc'])     #onehot encoding 안해줘서 loss를 저거 씀
     from keras.callbacks import EarlyStopping, ReduceLROnPlateau
     es = EarlyStopping(monitor='val_loss', mode='min', patience=100, restore_best_weights=True)
     rlr = ReduceLROnPlateau(monitor='val_loss', mode = 'min', patience=50, factor=0.5)
