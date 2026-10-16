@@ -68,4 +68,4 @@ vector_docs = vector_retriever.invoke(query)
 
 print("======================================")
 for doc in vector_docs:
-    print(doc.pa)
+    print(doc.page_content)
