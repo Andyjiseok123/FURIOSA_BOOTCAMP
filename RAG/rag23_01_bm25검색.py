@@ -26,6 +26,3 @@ bm25_docs = bm25_retriever.invoke(query)
 print("========================= BM25 검색 결과 =========================")
 for doc in bm25_docs:
     print(doc.page_content)
-
-# 유사도 검색과는 다르다
-
