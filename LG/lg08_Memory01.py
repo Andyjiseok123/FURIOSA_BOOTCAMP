@@ -1,5 +1,5 @@
 #tool calling : 외부 기능 가져와서 사용하기!!!
-#lg 05 copy
+#lg 07-2 copy
 
 from langchain_openai import ChatOpenAI
 import os
@@ -77,19 +77,15 @@ graph_builder.add_edge("tools","chatbot")
 graph = graph_builder.compile()
 
 ######################## 6. 그래프 실행 #################################
-query = "삼성전자의 오늘 주가를 알려줘"
 
+# 첫번째 질문
 response = graph.invoke({
-    "messages" : [("user", query)]
+    "messages" : [("user","내 이름은 이지석이야")]
 })
-
-print("AI : ", response["messages"][-1].content)
-
-##########################################################################
-# 그래프 이미지 저장
-path = './_save/image/'
-
-png_data = graph.get_graph().draw_mermaid_png()
-
-with open(path + "lg07_ToolNode.png",'wb') as file:
-    file.write(png_data)
+print(response["messages"][-1].content)
+print('============================================================')
+# 두번째 질문
+response = graph.invoke({
+    "messages" : [("user", "내 이름이 뭐라고 했지?")]
+})
+print(response["messages"][-1].content)
