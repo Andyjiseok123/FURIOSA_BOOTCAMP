@@ -290,3 +290,4 @@ _data/image/brain/train/normal/normal_train_9.jpg
 /_save
 .env
 /_db
+weather_data.csv

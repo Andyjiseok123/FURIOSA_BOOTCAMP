@@ -1,17 +1,17 @@
-from typing import TypedDict
+from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph,START,END
+from langgraph.graph.message import add_messages
 
 # 1. State 정의
 class State(TypedDict):
-    question : str
-    search_result : str
-    analysis_result : str
-    final_result : str
+    messages : Annotated[list, add_messages]
 
 # 2. 검색 노드
 def search_agent(state : State):
     print("검색 에이전트 실행")
-    return {"search_result" : "엔비디아는 AI GPU 시장의 주요 기업이다."}
+    question = state["messages"][-1].content
+
+    result = web_sea
 
 
 
